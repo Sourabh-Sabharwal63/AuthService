@@ -12,7 +12,7 @@ const inputValidation = async (req, res,next) => {
 };
 
 const tokenValidation=async(req,res,next)=>{
-  try {
+  try {          
     if(! req.headers['x-access-token']){
       return res.status(500).json({
         data:{},

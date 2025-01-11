@@ -7,6 +7,7 @@ const apiRoutes   =require("../routes/index");
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 const userService=require("../services/UserService");
+const db=require("../models");
 
 app.use("/api",apiRoutes);
 
@@ -15,6 +16,7 @@ const startServer=async () => {
   app.listen(Port,()=>{
     console.log(`Server started at Port ${Port}`)
   })
+  db.sequelize.sync({alter:true})
    //const user= await userService.getUser(2);
     // const result=await bcrypt.compare("Ironman@123",user.password);
     // console.log("result = ",result);
