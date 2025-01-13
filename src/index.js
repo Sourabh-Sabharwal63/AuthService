@@ -8,6 +8,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 const userService=require("../services/UserService");
 const db=require("../models");
+const {User,Role}=require("../models");
 
 app.use("/api",apiRoutes);
 
@@ -16,7 +17,7 @@ const startServer=async () => {
   app.listen(Port,()=>{
     console.log(`Server started at Port ${Port}`)
   })
-  db.sequelize.sync({alter:true})
+  // db.sequelize.sync({alter:true})
    //const user= await userService.getUser(2);
     // const result=await bcrypt.compare("Ironman@123",user.password);
     // console.log("result = ",result);
@@ -31,6 +32,22 @@ const startServer=async () => {
     // const newToken=await userService.signIn("Ironman.com","Ironman@123");
     
     // console.log("newToken = ",newToken);
+    // const user=await User.findOne({where:{
+    //   id:2
+    // }, through:{attributes: ['email','id']} });
+    
+    // console.log("user ",user);
+
+    
+    // const response=await user.getRoles();
+    // console.log("response ",response);
+
+    // const role=await Role.findByPk(3);
+    // // console.log("role ",role);
+    // user.addRole(role);
+
+    // const isValid=await userService.isAdmin(4);
+    
  } 
 
 startServer();

@@ -1,5 +1,5 @@
 const { User } = require("../models");
-
+const validationError = require("../util/validationError");
 class UserRepository {
   async create(data) {
     try {
@@ -7,6 +7,15 @@ class UserRepository {
       const user = await User.create(data);
       return user;
     } catch (error) {
+      console.log("Error in repository ",error);
+      if (error.name === "SequelizeValidationError") {
+        const newErr=new validationError(error);
+        console.log("newErr = ",newErr);
+        throw newErr;
+      }
+
+      console.log("error in userRepository");
+
       throw error;
     }
   }
@@ -49,13 +58,13 @@ class UserRepository {
     }
   }
 
-  async getByEmail(emailId){
+  async getByEmail(emailId) {
     try {
-      const user=await User.findOne({
-        where:{
-          email:emailId
-        }
-      })
+      const user = await User.findOne({
+        where: {
+          email: emailId,
+        },
+      });
       return user;
     } catch (error) {
       throw error;

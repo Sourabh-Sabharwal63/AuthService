@@ -1,10 +1,12 @@
-const UserRepository = require("../repository/userRepository");
+const {UserRepository,RoleRepository} = require("../repository");
 const { JwtKey } = require("../src/serverConfig");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 class UserService {
-  constructor(userRepository = new UserRepository()) {
+
+  constructor(userRepository = new UserRepository(),roleRepository=new RoleRepository) {
     this.userRepository = userRepository;
+    this.roleRepository=roleRepository;
   }
 
   async create(data) {
@@ -15,6 +17,11 @@ class UserService {
       });
       return true;
     } catch (error) {
+      if(error.name==="SequelizeValidationError"){
+        console.log("inside service error ",error);
+        throw error;
+     }
+      console.log("inside service error ",error);
       throw error;
     }
   }
@@ -114,6 +121,18 @@ class UserService {
         email: user.email,
       });
       return newToken;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async isAdmin(userId){
+    try {
+      const user=await this.userRepository.getUser(userId);
+      const role=await this.roleRepository.getRole(1);
+      return await user.hasRole(role);
+      
+      
     } catch (error) {
       throw error;
     }
